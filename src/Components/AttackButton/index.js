@@ -1,17 +1,13 @@
 import React from "react";
+import buttonHOC from '../ButtonHOC/index'
+import './style.css'
 
 function AttackButton(props) {
-  let handleAttack = () => {
-    let num1 = Math.floor(Math.random() * 10) + 1;
-    let num2 = Math.floor(Math.random() * 20) + 1;
-    props.attack(num1, num2);
-  };
-
   return (
-    <button onClick={handleAttack} className="attack">
+    <button className="attack" onClick={props.attack}>
       Attack
     </button>
   );
 }
 
-export default AttackButton;
+export default buttonHOC(AttackButton,10);

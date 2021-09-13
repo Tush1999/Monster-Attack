@@ -20,16 +20,12 @@ export default class Game extends Component {
     this.initialState = this.state;
   }
 
-  updateState = (num1, num2) => {
+  updateState = (monster, player1, list) => {
     this.setState(
       (state) => ({
-        monster: state.monster - num1,
-        player1: state.player1 - num2,
-        list: [
-          ...state.list,
-          { message: `You hit monster by ${num1}`, active: "win" },
-          { message: `Moster hit you by ${num2}`, active: "loss" },
-        ],
+        monster: monster,
+        player1: player1,
+        list: [...state.list, ...list],
       }),
       this.handleAlert
     );
@@ -49,28 +45,6 @@ export default class Game extends Component {
     }
   };
 
-  handleAttack = (num1, num2) => {
-    this.updateState(num1, num2);
-  };
-
-  handleSpecialAttack = (num1, num2) => {
-    this.updateState(num1, num2);
-  };
-  handleHeal = (num2,message) => {
-    console.log(message)
-    if (this.state.player1 < 90) {
-      this.setState(
-        (state) => ({
-          player1: this.state.player1 + 10 - num2,
-          list: [
-            ...state.list,
-           ...message
-          ],
-        }),
-        this.handleAlert
-      );
-    }
-  };
   handleGive = () => {
     this.setState({
       list: [...this.state.list, { message: "You give up" }],
@@ -102,13 +76,25 @@ export default class Game extends Component {
             <div className="button-div">
               {this.state.player1 !== 0 && !this.state.game ? (
                 <>
-                  <AttackButton attack={this.handleAttack} />
+                  <AttackButton
+                    player1={this.state.player1}
+                    monster={this.state.monster}
+                    updateState={this.updateState}
+                  />
 
                   {this.state.player1 > 90 ? (
-                    <SpecialAttack attack={this.handleSpecialAttack} />
+                    <SpecialAttack
+                      player1={this.state.player1}
+                      monster={this.state.monster}
+                      updateState={this.updateState}
+                    />
                   ) : null}
-                  <Heal heal={this.handleHeal}/>
-                  
+                  <Heal
+                    player1={this.state.player1}
+                    monster={this.state.monster}
+                    updateState={this.updateState}
+                  />
+
                   <button className="give-up" onClick={this.handleGive}>
                     Give up
                   </button>
@@ -125,8 +111,8 @@ export default class Game extends Component {
               <ScrollableFeed forceScroll={true}>
                 <div className="inner-div">
                   <ul className="text">
-                    {this.state.list.map((val) => (
-                      <ScoreBoard message={val.message} active={val.active} />
+                    {this.state.list.map((val,index) => (
+                      <ScoreBoard message={val.message} active={val.active} key={index}/>
                     ))}
                   </ul>
                 </div>
@@ -134,9 +120,11 @@ export default class Game extends Component {
             </div>
           </>
         ) : (
+          <div className="outer-div">
           <button className="start" onClick={this.startGame}>
             START GAME
           </button>
+          </div>
         )}
       </React.Fragment>
     );
