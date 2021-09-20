@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import ScoreBoard from "../ScoreBoard/index";
 import DisplayScore from "../DisplayScore/index";
-import AttackButton from "../AttackButton/index";
-import SpecialAttack from "../SpecialAttack/index";
-import Heal from "../Heal/index";
+import ButtonComponent from "../ButtonComponent/index";
 import "./style.css";
 import ScrollableFeed from "react-scrollable-feed";
 
@@ -41,7 +39,10 @@ export default class Game extends Component {
         ],
       });
     } else if (this.state.monster <= 0) {
-      alert("You win this game");
+      setImmediate(() => alert("You win this game"));
+      this.setState({
+        monster: 0,
+      });
     }
   };
 
@@ -74,25 +75,35 @@ export default class Game extends Component {
               />
             </div>
             <div className="button-div">
-              {this.state.player1 !== 0 && !this.state.game ? (
+              {this.state.player1 !== 0 &&
+              !this.state.game &&
+              this.state.monster !== 0 ? (
                 <>
-                  <AttackButton
+                  <ButtonComponent
                     player1={this.state.player1}
                     monster={this.state.monster}
                     updateState={this.updateState}
+                    name={"Attack"}
+                    num={10}
+                    class="attack"
                   />
 
                   {this.state.player1 > 90 ? (
-                    <SpecialAttack
+                    <ButtonComponent
                       player1={this.state.player1}
                       monster={this.state.monster}
                       updateState={this.updateState}
+                      name={"Special Attack"}
+                      num={20}
+                      class="special-attack"
                     />
                   ) : null}
-                  <Heal
+                  <ButtonComponent
                     player1={this.state.player1}
                     monster={this.state.monster}
                     updateState={this.updateState}
+                    name="Heal"
+                    class="heal"
                   />
 
                   <button className="give-up" onClick={this.handleGive}>
@@ -106,13 +117,16 @@ export default class Game extends Component {
               )}
             </div>
             <div className="extra" />
-
             <div className="result-box">
               <ScrollableFeed forceScroll={true}>
                 <div className="inner-div">
                   <ul className="text">
-                    {this.state.list.map((val,index) => (
-                      <ScoreBoard message={val.message} active={val.active} key={index}/>
+                    {this.state.list.map((val, index) => (
+                      <ScoreBoard
+                        message={val.message}
+                        active={val.active}
+                        key={index}
+                      />
                     ))}
                   </ul>
                 </div>
@@ -121,9 +135,9 @@ export default class Game extends Component {
           </>
         ) : (
           <div className="outer-div">
-          <button className="start" onClick={this.startGame}>
-            START GAME
-          </button>
+            <button className="start" onClick={this.startGame}>
+              START GAME
+            </button>
           </div>
         )}
       </React.Fragment>

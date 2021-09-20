@@ -2,7 +2,7 @@
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
-  list-style-type:none ;
+  list-style-type: none;
 }
 .heading {
   width: 70%;
@@ -104,15 +104,15 @@ li {
 .extra {
   height: 30px;
 }
-.game-over{
+.game-over {
   background-color: red;
-  color:white;
+  color: white;
 }
-.restart{
+.restart {
   background-color: #007a8070;
   width: 80px;
   height: 27px;
 }
-.start{
- margin:0 auto;
+.start {
+  margin: 0 auto;
 }
