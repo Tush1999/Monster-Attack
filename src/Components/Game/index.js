@@ -17,16 +17,29 @@ export default class Game extends Component {
     };
     this.initialState = this.state;
   }
-
-  updateState = (monster, player1, list) => {
+  updateState = (num1, num2) => {
     this.setState(
       (state) => ({
-        monster: monster,
-        player1: player1,
-        list: [...state.list, ...list],
+        monster: state.monster - num1,
+        player1: state.player1 - num2,
+        list: [
+          ...state.list,
+          { message: `You hit monster by ${num1}`, active: "win" },
+          { message: `Moster hit you by ${num2}`, active: "loss" },
+        ],
       }),
       this.handleAlert
     );
+  };
+  handleAttack = () => {
+    var num1 = Math.floor(Math.random() * 10) + 1;
+    var num2 = Math.floor(Math.random() * 20) + 1;
+    this.updateState(num1, num2);
+  };
+  handleSpecialAttack = () => {
+    let num1 = Math.floor(Math.random() * 20) + 1;
+    let num2 = Math.floor(Math.random() * 20) + 1;
+    this.updateState(num1, num2);
   };
   handleAlert = () => {
     if (this.state.player1 <= 0 && !this.state.game) {
@@ -43,6 +56,22 @@ export default class Game extends Component {
       this.setState({
         monster: 0,
       });
+    }
+  };
+  handleHeal = () => {
+    let num2 = Math.floor(Math.random() * 20) + 1;
+    if (this.state.player1 < 90) {
+      this.setState(
+        (state) => ({
+          player1: this.state.player1 + 10 - num2,
+          list: [
+            ...state.list,
+            { message: `You heal yourself by 10`, active: "win" },
+            { message: `Monster hit you by ${num2}`, active: "loss" },
+          ],
+        }),
+        this.handleAlert
+      );
     }
   };
 
@@ -80,30 +109,22 @@ export default class Game extends Component {
               this.state.monster !== 0 ? (
                 <>
                   <ButtonComponent
-                    player1={this.state.player1}
-                    monster={this.state.monster}
-                    updateState={this.updateState}
                     name={"Attack"}
-                    num={10}
                     class="attack"
+                    onClick={this.handleAttack}
                   />
 
                   {this.state.player1 > 90 ? (
                     <ButtonComponent
-                      player1={this.state.player1}
-                      monster={this.state.monster}
-                      updateState={this.updateState}
                       name={"Special Attack"}
-                      num={20}
                       class="special-attack"
+                      onClick={this.handleSpecialAttack}
                     />
                   ) : null}
                   <ButtonComponent
-                    player1={this.state.player1}
-                    monster={this.state.monster}
-                    updateState={this.updateState}
                     name="Heal"
                     class="heal"
+                    onClick={this.handleHeal}
                   />
 
                   <button className="give-up" onClick={this.handleGive}>

@@ -1,8 +1,7 @@
-import Game from './Components/Game/index'
+import Game from "./Components/Game/index";
 
 function App() {
-  return <Game />
-
+  return <Game />;
 }
 
 export default App;
