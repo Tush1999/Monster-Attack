@@ -114,5 +114,11 @@ li {
   height: 27px;
 }
 .start{
- margin:0 auto;
+  width:90px;
+ height:50px;
+ background-color: #d25050;
+}
+.outer-div{
+  margin-top: 50px;
+  text-align:center;
 }
